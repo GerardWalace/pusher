@@ -42,8 +42,8 @@ app.initializers.add('flarum-pusher', () => {
 
       return {
         channels: {
-          main: socket.subscribe('public'),
-          user: app.session.user ? socket.subscribe(`private-user${app.session.user.id()}`) : null,
+          main: socket.subscribe('cache-public'),
+          user: app.session.user ? socket.subscribe(`private-cache-user${app.session.user.id()}`) : null,
         },
         pusher: socket,
       };

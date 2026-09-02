@@ -28,7 +28,7 @@ class AuthController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $userChannel = 'private-user'.RequestUtil::getActor($request)->id;
+        $userChannel = 'private-cache-user'.RequestUtil::getActor($request)->id;
         $body = $request->getParsedBody();
 
         if (Arr::get($body, 'channel_name') === $userChannel) {
