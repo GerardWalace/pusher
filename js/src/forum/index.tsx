@@ -172,4 +172,17 @@ app.initializers.add('flarum-pusher', () => {
   extend(IndexPage.prototype, 'actionItems', (items: ItemList<Children>) => {
     items.remove('refresh');
   });
+
+  // Reconnect Pusher if the user returns to the tab and the connection is lost
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      app.pusher.then((binding: PusherBinding) => {
+        const pusher = binding.pusher;
+
+        if (pusher && pusher.connection.state !== 'connected') {
+          pusher.connect();
+        }
+      });
+    }
+  });
 });

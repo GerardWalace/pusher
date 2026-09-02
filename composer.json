@@ -1,5 +1,5 @@
 {
-    "name": "flarum/pusher",
+    "name": "gerardwalace/pusher",
     "description": "See new discussions and posts in real-time using Pusher.",
     "type": "flarum-extension",
     "keywords": [
