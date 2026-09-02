@@ -28,7 +28,7 @@ class SendPusherNotificationsJob extends AbstractJob
     {
         foreach ($this->recipients as $user) {
             if ($user->shouldAlert($this->blueprint::getType())) {
-                $pusher->trigger('private-user'.$user->id, 'notification', null);
+                $pusher->trigger('private-cache-user'.$user->id, 'notification', null);
             }
         }
     }

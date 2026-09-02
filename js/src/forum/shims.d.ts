@@ -11,6 +11,7 @@ declare module 'flarum/forum/ForumApplication' {
     }>;
 
     pushedUpdates: Array<any>;
+    lastPushedId: string | null;
   }
 }
 

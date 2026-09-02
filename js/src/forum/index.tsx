@@ -42,8 +42,8 @@ app.initializers.add('flarum-pusher', () => {
 
       return {
         channels: {
-          main: socket.subscribe('public'),
-          user: app.session.user ? socket.subscribe(`private-user${app.session.user.id()}`) : null,
+          main: socket.subscribe('cache-public'),
+          user: app.session.user ? socket.subscribe(`private-cache-user${app.session.user.id()}`) : null,
         },
         pusher: socket,
       };
@@ -91,8 +91,9 @@ app.initializers.add('flarum-pusher', () => {
 
     const id = String(data.discussionId);
 
-    if ((!app.current.get('discussion') || id !== app.current.get('discussion').id()) && app.pushedUpdates.indexOf(id) === -1) {
-      app.pushedUpdates.push(id);
+    if ((!app.current.get('discussion') || id !== app.current.get('discussion').id()) && id !== app.lastPushedId && app.pushedUpdates.indexOf(id) === -1) {
+      app.lastPushedId = id;
+      app.pushedUpdates.push(id);      
 
       if (app.current.matches(IndexPage)) {
         app.setTitleCount(app.pushedUpdates.length);

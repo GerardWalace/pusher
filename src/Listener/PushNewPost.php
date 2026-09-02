@@ -29,11 +29,11 @@ class PushNewPost
         $channels = [];
 
         if ($event->post->isVisibleTo(new Guest)) {
-            $channels[] = 'public';
+            $channels[] = 'cache-public';
         } else {
             // Retrieve private channels, used for each user.
             $response = $this->pusher->getChannels([
-                'filter_by_prefix' => 'private-user'
+                'filter_by_prefix' => 'private-cache-user'
             ]);
 
             // @phpstan-ignore-next-line
@@ -42,7 +42,7 @@ class PushNewPost
             }
 
             foreach ($response->channels as $name => $channel) {
-                $userId = Str::after($name, 'private-user');
+                $userId = Str::after($name, 'private-cache-user');
 
                 if (($user = User::find($userId)) && $event->post->isVisibleTo($user)) {
                     $channels[] = $name;
