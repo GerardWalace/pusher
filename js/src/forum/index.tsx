@@ -64,6 +64,10 @@ app.initializers.add('flarum-pusher', () => {
           m.redraw();
         });
       }
+
+      binding.pusher.connection.bind('connected', () => {
+        app.discussions.refresh().then(m.redraw);
+      });
     });
   });
 
@@ -105,12 +109,16 @@ app.initializers.add('flarum-pusher', () => {
   extend(IndexPage.prototype, 'oncreate', function () {
     app.pusher.then((binding: PusherBinding) => {
       binding.pusher.bind('newPost', newPostListHandler);
+      // binding.pusher.connection.bind('connected', () => {
+      //   app.discussions.refresh().then(m.redraw);
+      // });
     });
   });
 
   extend(IndexPage.prototype, 'onremove', function () {
     app.pusher.then((binding: PusherBinding) => {
       binding.pusher.unbind('newPost', newPostListHandler);
+      // binding.pusher.connection.unbind('connected');
     });
   });
 
@@ -160,12 +168,19 @@ app.initializers.add('flarum-pusher', () => {
           });
         }
       });
+
+      pusher.connection.bind('connected', () => {
+        app.store.find('discussions', this.discussion.id()).then(() => {
+            this.stream.update().then(m.redraw);
+        });
+      });
     });
   });
 
   extend(DiscussionPage.prototype, 'onremove', function () {
     app.pusher.then((binding: PusherBinding) => {
       binding.pusher.unbind('newPost');
+      binding.pusher.connection.unbind('connected');
     });
   });
 
